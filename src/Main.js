@@ -1,8 +1,11 @@
-import React, {useContext, useState } from "react";
-import ProductContext from './context/ProductContext'
+import React, {useContext, useState, useEffect } from "react";
+import { ProductContexts } from './context/ProductContext'
 export default function Main() {
   const [filter, setFilter] = useState([]);
-  const [categories, setCategories] = useState([
+  const {product, setProduct}= useContext(ProductContexts);
+ 
+
+const categories =  [
     "smartphones",
     "laptops",
     "fragrances",
@@ -23,10 +26,25 @@ export default function Main() {
     "automotive",
     "motorcycle",
     "lighting",
-  ]);
+  ]
   
-  const { product} = useContext(ProductContext);
+  
+  const fetchApi = async () => {
+    try {
+      const response = await fetch("https://dummyjson.com/products/");
+      const data = await response.json();
+      const productS = await data.products;
+      setProduct(productS);
+      console.log(productS);
+      console.log(data);
+    } catch {
+      console.error();
+    }
+  };
 
+  useEffect(() => {
+    fetchApi();
+  });
    
   const handleFilterState = (e) => {
     let filtered = [];
@@ -82,7 +100,7 @@ export default function Main() {
 }
 
 function Products() {
-  const { product } = useContext(ProductContext);
+  const {product} = useContext(ProductContexts);
   return (
     <div id="product1" className="w-[20rem] h-[25rem] mt-4">
       <div className="productImg bg-[#F8F9FA] w-full h-80 flex items-center justify-center">
