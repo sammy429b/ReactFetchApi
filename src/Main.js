@@ -1,11 +1,8 @@
-import React, {useContext, useState, useEffect } from "react";
-import { ProductContexts } from './context/ProductContext'
+import React, { useContext, useState } from "react";
+import ProductContext from './context/ProductContext'
 export default function Main() {
   const [filter, setFilter] = useState([]);
-  const {product, setProduct}= useContext(ProductContexts);
- 
-
-const categories =  [
+  const [categories, setCategories] = useState([
     "smartphones",
     "laptops",
     "fragrances",
@@ -26,26 +23,11 @@ const categories =  [
     "automotive",
     "motorcycle",
     "lighting",
-  ]
-  
-  
-  const fetchApi = async () => {
-    try {
-      const response = await fetch("https://dummyjson.com/products/");
-      const data = await response.json();
-      const productS = await data.products;
-      setProduct(productS);
-      console.log(productS);
-      console.log(data);
-    } catch {
-      console.error();
-    }
-  };
+  ]);
 
-  useEffect(() => {
-    fetchApi();
-  });
-   
+  const { product } = useContext(ProductContext);
+
+
   const handleFilterState = (e) => {
     let filtered = [];
     if (e.target.checked) {
@@ -99,20 +81,19 @@ const categories =  [
   );
 }
 
-function Products() {
-  const {product} = useContext(ProductContexts);
+function Products(props) {
   return (
     <div id="product1" className="w-[20rem] h-[25rem] mt-4">
       <div className="productImg bg-[#F8F9FA] w-full h-80 flex items-center justify-center">
-        <img src={product.thumbnail} className="w-3/4 h-5/6" alt="" />
+        <img src={props.product.thumbnail} className="w-3/4 h-5/6" alt="" />
       </div>
       <div className="productDescription p-2 flex items-center justify-between">
         <div className="">
           <p id="productName" className="text-base font-medium">
-            {product.title}
+            {props.product.title}
           </p>
           <p id="productPrice" className="text-sm text-[#666666]">
-            ${product.price}
+            ${props.product.price}
           </p>
         </div>
         <div className="">

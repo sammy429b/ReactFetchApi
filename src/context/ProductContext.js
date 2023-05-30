@@ -1,18 +1,40 @@
-import {createContext, useState } from "react";
-export const ProductContexts = createContext({
-    product: []
-  })
+import { createContext, useState, useEffect } from "react";
+const ProductContext = createContext({
+  product: []
+})
 
-const ProductContextProvider = ({ children }) => {
-    const [product, setProduct] = useState([]);
+export const ProductContextProvider = ({ children }) => {
+  const [product, setProduct] = useState([]);
 
- 
+  const fetchApi = async () => {
+    try {
+      const response = await fetch("https://dummyjson.com/products/");
+      const data = await response.json();
+      const productS = await data.products;
+      setProduct(productS);
+      console.log(productS);
+      console.log(data);
+    } catch {
+      console.error();
+    }
+  };
+
+  useEffect(() => {
+    fetchApi();
+  }, []);
+
+
+
+
+
+
 
   return (
-    <ProductContexts.Provider value={{ product, setProduct}}>
+    <ProductContext.Provider value={{ product, setProduct }}>
       {children}
-    </ProductContexts.Provider>
+    </ProductContext.Provider>
   )
 };
 
-export const ProductContext = { ProductContextProvider, ProductContexts}
+
+export default ProductContext
