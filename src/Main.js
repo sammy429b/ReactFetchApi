@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useState } from "react";
+import ProductContext from './context/ProductContext'
 export default function Main() {
-  const [product, setProduct] = useState([]);
-
   const [filter, setFilter] = useState([]);
   const [categories, setCategories] = useState([
     "smartphones",
@@ -25,24 +24,10 @@ export default function Main() {
     "motorcycle",
     "lighting",
   ]);
+  
+  const { product} = useContext(ProductContext);
 
-  const fetchApi = async () => {
-    try {
-      const response = await fetch("https://dummyjson.com/products/");
-      const data = await response.json();
-      const productS = await data.products;
-      setProduct(productS);
-      console.log(productS);
-      console.log(data);
-    } catch {
-      console.error();
-    }
-  };
-
-  useEffect(() => {
-    fetchApi();
-  }, []);
-
+   
   const handleFilterState = (e) => {
     let filtered = [];
     if (e.target.checked) {
@@ -58,8 +43,7 @@ export default function Main() {
       }
       setFilter([...filtered]);
     }
-  };
-
+  }
   return (
     <>
       <div className="flex flex-wrap">
@@ -86,18 +70,19 @@ export default function Main() {
         <div id="products" className="w-5/6  grid grid-cols-3">
           {filter.length === 0
             ? product.map((curr) => {
-                return <Products product={curr} />;
-              })
+              return <Products product={curr} />;
+            })
             : filter.map((curr) => {
-                return <Products product={curr} />;
-              })}
+              return <Products product={curr} />;
+            })}
         </div>
       </div>
     </>
   );
 }
 
-function Products({ product }) {
+function Products() {
+  const { product } = useContext(ProductContext);
   return (
     <div id="product1" className="w-[20rem] h-[25rem] mt-4">
       <div className="productImg bg-[#F8F9FA] w-full h-80 flex items-center justify-center">

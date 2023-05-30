@@ -1,8 +1,11 @@
 import Main from './Main'
+import ProductContextProvider from './Main'
 function App() {
   return(
     <>
-    <Main/>
+    <ProductContextProvider>
+      <Main/>
+    </ProductContextProvider>
     </>
   )
 }
